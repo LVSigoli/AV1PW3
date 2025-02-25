@@ -1,20 +1,19 @@
 package br.edu.lucas3020428;
 
 import br.edu.lucas3020428.DAO.AlunoDAO.AlunoDAO;
+import br.edu.lucas3020428.Utils.InputUtils;
 import br.edu.lucas3020428.aluno.Aluno;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         EntityManager em = JPAUtil.getEntityManager();
-
 
 
         int option;
@@ -34,7 +33,7 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    cadastrarAluno(scanner);
+                    cadastrarAluno(scanner, em);
                     break;
                 case 2:
                     excluirAluno();
@@ -57,73 +56,62 @@ public class Main {
         } while (option != 6);
     }
 
-    private static void cadastrarAluno(Scanner scanner) {
+    private static void cadastrarAluno(Scanner scanner, EntityManager em) {
         System.out.println(" CADASTRO DE ALUNO");
+        scanner.nextLine();
 
-        System.out.print("Nome: ");
-        String nome = scanner.next();
+        System.out.println("Nome: ");
+        String nome = scanner.nextLine();
 
-        System.out.print("RA: ");
-        String ra = scanner.next();
+        System.out.println("RA: ");
+        String ra = scanner.nextLine();
 
-        System.out.print("E-mail: ");
-        String email = scanner.next();
+        System.out.println("E-mail: ");
+        String email = scanner.nextLine();
 
-        BigDecimal nota1 = normalizeInputToBigDecimal(scanner, "Nota 1: ");
-        BigDecimal nota2 = normalizeInputToBigDecimal(scanner, "Nota 2: ");
-        BigDecimal nota3 = normalizeInputToBigDecimal(scanner, "Nota 3: ");
+        BigDecimal nota1 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 1: ");
+        BigDecimal nota2 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 2: ");
+        BigDecimal nota3 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 3: ");
 
         Aluno aluno = new Aluno(nome, ra, email, nota1, nota2, nota3);
 
-        AlunoDAO alunoDAO = new AlunoDAO();
 
+        AlunoDAO alunoDAO = new AlunoDAO(em);
         alunoDAO.saveStudent(aluno);
 
         System.out.println("Aluno cadastrado com sucesso!");
-        System.out.println("//////////////////////////////////");
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(" ");
     }
 
-
-    private static BigDecimal normalizeInputToBigDecimal(Scanner scanner, String mensagem) {
-        while (true) {
-            try {
-                System.out.print(mensagem);
-                String entrada = scanner.next().replace(",", ".");
-
-                return new BigDecimal(entrada);
-
-            } catch (NumberFormatException e) {
-                System.out.println("Erro: Digite um número válido!");
-            }
-        }
-    }
 
     private static void excluirAluno() {
-        System.out.println("** EXCLUIR ALUNO **");
+        System.out.println("EXCLUIR ALUNO: ");
 
-        System.out.println("//////////////////////////////////");
 
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(" ");
     }
 
     private static void alterarAluno() {
         System.out.println("** ALTERAR ALUNO **");
 
-        System.out.println("//////////////////////////////////");
-
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(" ");
     }
 
     private static void buscarAluno() {
         System.out.println("** BUSCAR ALUNO **");
 
-        System.out.println("//////////////////////////////////");
-
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(" ");
     }
 
     private static void listarAlunos() {
         System.out.println("** LISTAR ALUNOS **");
 
-        System.out.println("//////////////////////////////////");
-
+        System.out.println("----------------------------------------------------------------");
+        System.out.println(" ");
     }
 
 
