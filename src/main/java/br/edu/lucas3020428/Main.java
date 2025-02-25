@@ -1,6 +1,7 @@
 package br.edu.lucas3020428;
 
 import br.edu.lucas3020428.DAO.AlunoDAO.AlunoDAO;
+import br.edu.lucas3020428.Excepetions.NotFoundException;
 import br.edu.lucas3020428.Utils.InputUtils;
 import br.edu.lucas3020428.aluno.Aluno;
 import jakarta.persistence.EntityManager;
@@ -36,7 +37,7 @@ public class Main {
                     cadastrarAluno(scanner, em);
                     break;
                 case 2:
-                    excluirAluno();
+                    excluirAluno(scanner, em);
                     break;
                 case 3:
                     alterarAluno();
@@ -85,9 +86,21 @@ public class Main {
     }
 
 
-    private static void excluirAluno() {
+    private static void excluirAluno(Scanner scanner, EntityManager em) {
         System.out.println("EXCLUIR ALUNO: ");
+        scanner.nextLine();
 
+        System.out.println("Informe o nome do aluno: ");
+        String nome = scanner.nextLine();
+        AlunoDAO alunoDAO = new AlunoDAO(em);
+        try {
+            alunoDAO.deleteStudentByName(nome);
+            System.out.println("Aluno removido com sucesso!");
+        } catch (NotFoundException e) {
+            System.out.println("Erro: " + e.getMessage());  // Mensagem específica quando aluno não for encontrado
+        } catch (RuntimeException e) {
+            System.out.println("Erro ao excluir aluno: " + e.getMessage());
+        }
 
         System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
