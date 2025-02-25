@@ -26,4 +26,6 @@ public class Aluno {
         this.nota2 = nota2;
         this.nota3 = nota3;
     }
+
+    public Aluno() {}
 }

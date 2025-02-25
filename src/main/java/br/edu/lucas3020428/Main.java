@@ -1,6 +1,8 @@
 package br.edu.lucas3020428;
 
+import br.edu.lucas3020428.DAO.AlunoDAO.AlunoDAO;
 import br.edu.lucas3020428.aluno.Aluno;
+import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -11,6 +13,10 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        EntityManager em = JPAUtil.getEntityManager();
+
+
+
         int option;
 
         do {
@@ -68,6 +74,10 @@ public class Main {
         BigDecimal nota3 = normalizeInputToBigDecimal(scanner, "Nota 3: ");
 
         Aluno aluno = new Aluno(nome, ra, email, nota1, nota2, nota3);
+
+        AlunoDAO alunoDAO = new AlunoDAO();
+
+        alunoDAO.saveStudent(aluno);
 
         System.out.println("Aluno cadastrado com sucesso!");
         System.out.println("//////////////////////////////////");

@@ -6,13 +6,15 @@ import jakarta.persistence.EntityManager;
 
 public class AlunoDAO {
 
-    private EntityManager em;
+    private final  EntityManager em = JPAUtil.getEntityManager() ;
 
-    public AlunoDAO(EntityManager em) {
-        this.em = em;
-    }
 
     public void saveStudent(Aluno aluno) {
+
+        em.getTransaction().begin();
+        em.persist(aluno);
+        em.getTransaction().commit();
+        em.close();
 
     }
 }
