@@ -7,6 +7,7 @@ import br.edu.lucas3020428.aluno.Aluno;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -196,7 +197,33 @@ public class Main {
     }
 
     private static void listarAlunos(Scanner scanner, EntityManager em) {
-        System.out.println("** LISTAR ALUNOS **");
+        try {
+            AlunoDAO alunoDAO = new AlunoDAO(em);
+            List<Aluno> students = alunoDAO.findAllStudents();
+
+            if (students.isEmpty()) {
+                System.out.println(" ");
+                System.out.println("Nenhum aluno cadastrado");
+                System.out.println(" ");
+                return;
+            }
+
+            System.out.println(" ");
+            System.out.println(" Exibindo todos os Alunos: ");
+            System.out.println(" ");
+
+            students.forEach(
+                    student -> {
+                        System.out.println(student);
+                        System.out.println(" ");
+                    }
+            );
+
+        } catch (RuntimeException e) {
+            System.out.println("Não foi possível realizar a listagem de alunos");
+        } catch (Exception e) {
+            System.out.println("Não foi possível realizar a listagem de alunos");
+        }
 
         System.out.println(" ");
     }
