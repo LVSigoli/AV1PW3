@@ -19,7 +19,6 @@ public class AlunoDAO {
         em.getTransaction().begin();
         em.persist(aluno);
         em.getTransaction().commit();
-
     }
 
     public void deleteStudentByName(String name) throws NotFoundException {
@@ -29,7 +28,6 @@ public class AlunoDAO {
             em.getTransaction().begin();
             em.remove(alunoToDelete);
             em.getTransaction().commit();
-            System.out.println("Aluno removido com sucesso!");
         } catch (Exception e) {
             throw new NotFoundException("Alnuno não encontrado");
         }
