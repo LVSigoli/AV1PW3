@@ -5,6 +5,8 @@ import br.edu.lucas3020428.Excepetions.NotFoundException;
 import br.edu.lucas3020428.aluno.Aluno;
 import jakarta.persistence.EntityManager;
 
+import java.util.List;
+
 public class AlunoDAO {
 
     private final EntityManager em;
@@ -50,11 +52,10 @@ public class AlunoDAO {
 
     }
 
+
     public void updateStudent(Aluno aluno) {
         em.getTransaction().begin();
-
         em.merge(aluno);
-
         em.getTransaction().commit();
     }
 

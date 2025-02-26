@@ -9,13 +9,10 @@ import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         EntityManager em = JPAUtil.getEntityManager();
-
 
         int option;
 
@@ -23,10 +20,15 @@ public class Main {
             System.out.println("** CADASTRO DE ALUNOS **");
 
             System.out.println("1 - Cadastrar aluno");
+
             System.out.println("2 - Excluir aluno");
+
             System.out.println("3 - Alterar aluno");
+
             System.out.println("4 - Buscar aluno pelo nome");
+
             System.out.println("5 - Listar alunos (com status aprovação)");
+
             System.out.println("6 - FIM");
 
             System.out.print("Escolha uma opção: ");
@@ -43,10 +45,10 @@ public class Main {
                     alterarAluno(scanner, em);
                     break;
                 case 4:
-                    buscarAluno();
+                    buscarAluno(scanner, em);
                     break;
                 case 5:
-                    listarAlunos();
+                    listarAlunos(scanner, em);
                     break;
                 case 6:
                     System.out.println("Saindo...");
@@ -81,10 +83,9 @@ public class Main {
         alunoDAO.saveStudent(aluno);
 
         System.out.println("Aluno cadastrado com sucesso!");
-        System.out.println("----------------------------------------------------------------");
+
         System.out.println(" ");
     }
-
 
     private static void excluirAluno(Scanner scanner, EntityManager em) {
         System.out.println("EXCLUIR ALUNO: ");
@@ -95,14 +96,14 @@ public class Main {
         AlunoDAO alunoDAO = new AlunoDAO(em);
         try {
             alunoDAO.deleteStudentByName(nome);
+
             System.out.println("Aluno removido com sucesso!");
         } catch (NotFoundException e) {
-            System.out.println("Erro: " + e.getMessage());  // Mensagem específica quando aluno não for encontrado
+            System.out.println("Erro: " + e.getMessage());
         } catch (RuntimeException e) {
-            System.out.println("Erro ao excluir aluno: " + e.getMessage());
+            System.out.println("Erro ao excluir aluno");
         }
 
-        System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
     }
 
@@ -125,48 +126,35 @@ public class Main {
 
             System.out.println("Novos dados (deixe em branco para manter o atual)");
 
-
             System.out.println("Novo nome do aluno: ");
             String novoNome = scanner.nextLine().trim();
-            if (!novoNome.isEmpty()) {
-                alunoFound.setNome(novoNome);
-            }
 
+            if (!novoNome.isEmpty()) alunoFound.setNome(novoNome);
 
             System.out.println("Novo email: ");
             String novoEmail = scanner.nextLine().trim();
-            if (!novoEmail.isEmpty()) {
-                alunoFound.setEmail(novoEmail);
-            }
 
+            if (!novoEmail.isEmpty()) alunoFound.setEmail(novoEmail);
 
             System.out.println("Novo RA: ");
             String novoRa = scanner.nextLine().trim();
-            if (!novoRa.isEmpty()) {
-                alunoFound.setRa(novoRa);
-            }
 
+            if (!novoRa.isEmpty()) alunoFound.setRa(novoRa);
 
             System.out.println("Nova Nota 1: ");
             String novaNota1 = scanner.nextLine().trim();
-            if (!novaNota1.isEmpty()) {
-                alunoFound.setNota1(new BigDecimal(novaNota1));
-            }
 
+            if (!novaNota1.isEmpty()) alunoFound.setNota1(new BigDecimal(novaNota1));
 
             System.out.println("Nova Nota 2: ");
             String novaNota2 = scanner.nextLine().trim();
-            if (!novaNota2.isEmpty()) {
-                alunoFound.setNota2(new BigDecimal(novaNota2));
-            }
 
+            if (!novaNota2.isEmpty()) alunoFound.setNota2(new BigDecimal(novaNota2));
 
             System.out.println("Nova Nota 3: ");
             String novaNota3 = scanner.nextLine().trim();
-            if (!novaNota3.isEmpty()) {
-                alunoFound.setNota3(new BigDecimal(novaNota3));
-            }
 
+            if (!novaNota3.isEmpty()) alunoFound.setNota3(new BigDecimal(novaNota3));
 
             alunoDAO.updateStudent(alunoFound);
 
@@ -175,29 +163,43 @@ public class Main {
         } catch (NotFoundException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro inesperado ao atualizar aluno: " + e.getMessage());
+            System.out.println("Erro inesperado ao atualizar aluno ");
         }
 
-        System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
     }
-
 
     private static void buscarAluno(Scanner scanner, EntityManager em) {
-        System.out.println(" BUSCAR ALUNO: ");
+        System.out.println(" ");
+        System.out.println("BUSCAR ALUNO: ");
         scanner.nextLine();
 
-        System.out.println("----------------------------------------------------------------");
+        System.out.println("Informe o nome do aluno: ");
+        String nome = scanner.nextLine().trim();
+
+        try {
+            AlunoDAO alunoDAO = new AlunoDAO(em);
+
+            Aluno alunoFound = alunoDAO.findStudentByName(nome);
+
+            if (alunoFound != null) System.out.println(alunoFound);
+
+            else System.out.println("Aluno não encontrado com o nome: " + nome);
+
+        } catch (NotFoundException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Erro inesperado ao buscar aluno");
+        }
+
         System.out.println(" ");
     }
 
-    private static void listarAlunos() {
+    private static void listarAlunos(Scanner scanner, EntityManager em) {
         System.out.println("** LISTAR ALUNOS **");
 
-        System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
     }
-
 
 }
 

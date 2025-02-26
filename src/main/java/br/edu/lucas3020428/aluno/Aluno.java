@@ -1,12 +1,13 @@
 package br.edu.lucas3020428.aluno;
 
 // External Libraries
+
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name="alunos")
+@Table(name = "alunos")
 
 public class Aluno {
     @Id
@@ -19,7 +20,7 @@ public class Aluno {
     private BigDecimal nota2;
     private BigDecimal nota3;
 
-    // Construtores
+
     public Aluno(String nome, String ra, String email, BigDecimal nota1, BigDecimal nota2, BigDecimal nota3) {
         this.nome = nome;
         this.ra = ra;
@@ -29,7 +30,8 @@ public class Aluno {
         this.nota3 = nota3;
     }
 
-    public Aluno() {}
+    public Aluno() {
+    }
 
 
     public long getId() {
@@ -90,14 +92,12 @@ public class Aluno {
 
     @Override
     public String toString() {
-        return "Aluno{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", ra='" + ra + '\'' +
-                ", email='" + email + '\'' +
-                ", nota1=" + nota1 +
-                ", nota2=" + nota2 +
-                ", nota3=" + nota3 +
-                '}';
+        return "Dados do aluno: \n" +
+                "Nome: " + nome + "\n" +
+                "RA: " + ra + "\n" +
+                "Email: " + email + "\n" +
+                "Nota 1: " + nota1 + "\n" +
+                "Nota 2: " + nota2 + "\n" +
+                "Nota 3: " + nota3;
     }
 }
