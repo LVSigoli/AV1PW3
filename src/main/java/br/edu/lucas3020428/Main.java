@@ -1,9 +1,9 @@
 package br.edu.lucas3020428;
 
-import br.edu.lucas3020428.DAO.AlunoDAO.AlunoDAO;
+import br.edu.lucas3020428.DAO.StudentDAO.StudentDAO;
 import br.edu.lucas3020428.Excepetions.NotFoundException;
 import br.edu.lucas3020428.Utils.InputUtils;
-import br.edu.lucas3020428.aluno.Aluno;
+import br.edu.lucas3020428.student.Student;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
@@ -19,37 +19,30 @@ public class Main {
 
         do {
             System.out.println("** CADASTRO DE ALUNOS **");
-
             System.out.println("1 - Cadastrar aluno");
-
             System.out.println("2 - Excluir aluno");
-
             System.out.println("3 - Alterar aluno");
-
             System.out.println("4 - Buscar aluno pelo nome");
-
             System.out.println("5 - Listar alunos (com status aprovação)");
-
             System.out.println("6 - FIM");
-
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
 
             switch (option) {
                 case 1:
-                    cadastrarAluno(scanner, em);
+                    registerStudent(scanner, em);
                     break;
                 case 2:
-                    excluirAluno(scanner, em);
+                    deleteStudent(scanner, em);
                     break;
                 case 3:
-                    alterarAluno(scanner, em);
+                    updateStudent(scanner, em);
                     break;
                 case 4:
-                    buscarAluno(scanner, em);
+                    searchStudent(scanner, em);
                     break;
                 case 5:
-                    listarAlunos(scanner, em);
+                    listStudents(scanner, em);
                     break;
                 case 6:
                     System.out.println("Saindo...");
@@ -60,12 +53,12 @@ public class Main {
         } while (option != 6);
     }
 
-    private static void cadastrarAluno(Scanner scanner, EntityManager em) {
+    private static void registerStudent(Scanner scanner, EntityManager em) {
         System.out.println(" CADASTRO DE ALUNO");
         scanner.nextLine();
 
         System.out.println("Nome: ");
-        String nome = scanner.nextLine();
+        String name = scanner.nextLine();
 
         System.out.println("RA: ");
         String ra = scanner.nextLine();
@@ -73,133 +66,119 @@ public class Main {
         System.out.println("E-mail: ");
         String email = scanner.nextLine();
 
-        BigDecimal nota1 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 1: ");
-        BigDecimal nota2 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 2: ");
-        BigDecimal nota3 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 3: ");
+        BigDecimal grade1 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 1: ");
+        BigDecimal grade2 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 2: ");
+        BigDecimal grade3 = InputUtils.normalizeInputToBigDecimal(scanner, "Nota 3: ");
 
-        Aluno aluno = new Aluno(nome, ra, email, nota1, nota2, nota3);
+        Student student = new Student(name, ra, email, grade1, grade2, grade3);
 
-
-        AlunoDAO alunoDAO = new AlunoDAO(em);
-        alunoDAO.saveStudent(aluno);
+        StudentDAO studentDAO = new StudentDAO(em);
+        studentDAO.saveStudent(student);
 
         System.out.println("Aluno cadastrado com sucesso!");
-
         System.out.println(" ");
     }
 
-    private static void excluirAluno(Scanner scanner, EntityManager em) {
+    private static void deleteStudent(Scanner scanner, EntityManager em) {
         System.out.println("EXCLUIR ALUNO: ");
         scanner.nextLine();
 
         System.out.println("Informe o nome do aluno: ");
-        String nome = scanner.nextLine();
-        AlunoDAO alunoDAO = new AlunoDAO(em);
+        String name = scanner.nextLine();
+        StudentDAO studentDAO = new StudentDAO(em);
         try {
-            alunoDAO.deleteStudentByName(nome);
-
+            studentDAO.deleteStudentByName(name);
             System.out.println("Aluno removido com sucesso!");
         } catch (NotFoundException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (RuntimeException e) {
             System.out.println("Erro ao excluir aluno");
         }
-
         System.out.println(" ");
     }
 
-    private static void alterarAluno(Scanner scanner, EntityManager em) {
+    private static void updateStudent(Scanner scanner, EntityManager em) {
         System.out.println("ALTERAR ALUNO: ");
         scanner.nextLine();
 
         System.out.println("Informe o nome do aluno: ");
-        String nome = scanner.nextLine().trim();
+        String name = scanner.nextLine().trim();
 
-        AlunoDAO alunoDAO = new AlunoDAO(em);
+        StudentDAO studentDAO = new StudentDAO(em);
 
         try {
-            Aluno alunoFound = alunoDAO.findStudentByName(nome);
+            Student foundStudent = studentDAO.findStudentByName(name);
 
-            if (alunoFound == null) {
-                System.out.println("Aluno não encontrado com o nome: " + nome);
+            if (foundStudent == null) {
+                System.out.println("Aluno não encontrado com o nome: " + name);
                 return;
             }
 
             System.out.println("Novos dados (deixe em branco para manter o atual)");
 
             System.out.println("Novo nome do aluno: ");
-            String novoNome = scanner.nextLine().trim();
-
-            if (!novoNome.isEmpty()) alunoFound.setNome(novoNome);
+            String newName = scanner.nextLine().trim();
+            if (!newName.isEmpty()) foundStudent.setName(newName);
 
             System.out.println("Novo email: ");
-            String novoEmail = scanner.nextLine().trim();
-
-            if (!novoEmail.isEmpty()) alunoFound.setEmail(novoEmail);
+            String newEmail = scanner.nextLine().trim();
+            if (!newEmail.isEmpty()) foundStudent.setEmail(newEmail);
 
             System.out.println("Novo RA: ");
-            String novoRa = scanner.nextLine().trim();
-
-            if (!novoRa.isEmpty()) alunoFound.setRa(novoRa);
+            String newRa = scanner.nextLine().trim();
+            if (!newRa.isEmpty()) foundStudent.setRegistrationNumber(newRa);
 
             System.out.println("Nova Nota 1: ");
-            String novaNota1 = scanner.nextLine().trim();
-
-            if (!novaNota1.isEmpty()) alunoFound.setNota1(new BigDecimal(novaNota1));
+            String newGrade1 = scanner.nextLine().trim();
+            if (!newGrade1.isEmpty()) foundStudent.setGrade1(new BigDecimal(newGrade1));
 
             System.out.println("Nova Nota 2: ");
-            String novaNota2 = scanner.nextLine().trim();
-
-            if (!novaNota2.isEmpty()) alunoFound.setNota2(new BigDecimal(novaNota2));
+            String newGrade2 = scanner.nextLine().trim();
+            if (!newGrade2.isEmpty()) foundStudent.setGrade2(new BigDecimal(newGrade2));
 
             System.out.println("Nova Nota 3: ");
-            String novaNota3 = scanner.nextLine().trim();
+            String newGrade3 = scanner.nextLine().trim();
+            if (!newGrade3.isEmpty()) foundStudent.setGrade3(new BigDecimal(newGrade3));
 
-            if (!novaNota3.isEmpty()) alunoFound.setNota3(new BigDecimal(novaNota3));
-
-            alunoDAO.updateStudent(alunoFound);
+            studentDAO.updateStudent(foundStudent);
 
             System.out.println("Aluno atualizado com sucesso!");
 
         } catch (NotFoundException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro inesperado ao atualizar aluno ");
+            System.out.println("Erro inesperado ao atualizar aluno "+ e.getMessage());
         }
-
         System.out.println(" ");
     }
 
-    private static void buscarAluno(Scanner scanner, EntityManager em) {
+    private static void searchStudent(Scanner scanner, EntityManager em) {
         System.out.println(" ");
         System.out.println("BUSCAR ALUNO: ");
         scanner.nextLine();
 
         System.out.println("Informe o nome do aluno: ");
-        String nome = scanner.nextLine().trim();
+        String name = scanner.nextLine().trim();
 
         try {
-            AlunoDAO alunoDAO = new AlunoDAO(em);
+            StudentDAO studentDAO = new StudentDAO(em);
+            Student foundStudent = studentDAO.findStudentByName(name);
 
-            Aluno alunoFound = alunoDAO.findStudentByName(nome);
-
-            if (alunoFound != null) System.out.println(alunoFound);
-
-            else System.out.println("Aluno não encontrado com o nome: " + nome);
+            if (foundStudent != null) System.out.println(foundStudent);
+            else System.out.println("Aluno não encontrado com o nome: " + name);
 
         } catch (NotFoundException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (RuntimeException e) {
             System.out.println("Erro inesperado ao buscar aluno");
         }
-
         System.out.println(" ");
     }
 
-    private static void listarAlunos(Scanner scanner, EntityManager em) {
+    private static void listStudents(Scanner scanner, EntityManager em) {
         try {
-            AlunoDAO alunoDAO = new AlunoDAO(em);
-            List<Aluno> students = alunoDAO.findAllStudents();
+            StudentDAO studentDAO = new StudentDAO(em);
+            List<Student> students = studentDAO.findAllStudents();
 
             if (students.isEmpty()) {
                 System.out.println(" ");
@@ -212,21 +191,13 @@ public class Main {
             System.out.println(" Exibindo todos os Alunos: ");
             System.out.println(" ");
 
-            students.forEach(
-                    student -> {
-                        System.out.println(student.toStringWithStatus());
-                        System.out.println(" ");
-                    }
-            );
-
-        } catch (RuntimeException e) {
-            System.out.println("Não foi possível realizar a listagem de alunos");
+            students.forEach(student -> {
+                System.out.println(student.toStringWithStatus());
+                System.out.println(" ");
+            });
         } catch (Exception e) {
             System.out.println("Não foi possível realizar a listagem de alunos");
         }
-
         System.out.println(" ");
     }
-
 }
-
