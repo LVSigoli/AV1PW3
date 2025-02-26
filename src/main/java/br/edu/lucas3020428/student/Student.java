@@ -1,7 +1,6 @@
 package br.edu.lucas3020428.student;
 
 // External Libraries
-
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -115,7 +114,7 @@ public class Student {
     }
 
     private String getStatus(BigDecimal media) {
-        if (media.compareTo(BigDecimal.valueOf(7)) >= 0) return "Aprovado";
+        if (media.compareTo(BigDecimal.valueOf(6)) >= 0) return "Aprovado";
 
         if (media.compareTo(BigDecimal.valueOf(4)) >= 0) return "Recuperação";
 

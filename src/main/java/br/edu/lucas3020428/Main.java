@@ -7,6 +7,7 @@ import br.edu.lucas3020428.student.Student;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,7 +27,7 @@ public class Main {
             System.out.println("5 - Listar alunos (com status aprovação)");
             System.out.println("6 - FIM");
             System.out.print("Escolha uma opção: ");
-            option = scanner.nextInt();
+            option = getOption(scanner);
 
             switch (option) {
                 case 1:
@@ -45,12 +46,27 @@ public class Main {
                     listStudents(scanner, em);
                     break;
                 case 6:
+                    closeTransaction(em);
                     System.out.println("Saindo...");
                     break;
                 default:
-                    System.out.println("Opção inválida!");
+                    break;
             }
         } while (option != 6);
+    }
+
+    private static int getOption(Scanner scanner) {
+        int option;
+        while (true) {
+            try {
+                option = scanner.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor, informe um valor inteiro válido.");
+                scanner.nextLine();
+            }
+        }
+        return option;
     }
 
     private static void registerStudent(Scanner scanner, EntityManager em) {
@@ -199,5 +215,9 @@ public class Main {
             System.out.println("Não foi possível realizar a listagem de alunos");
         }
         System.out.println(" ");
+    }
+
+    private static void closeTransaction( EntityManager em) {
+        em.close();
     }
 }
