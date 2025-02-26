@@ -34,7 +34,7 @@ public class AlunoDAO {
     }
 
 
-    private Aluno findStudentByName(String name) throws NotFoundException {
+    public Aluno findStudentByName(String name) throws NotFoundException {
         String query = "SELECT a FROM Aluno a WHERE a.nome = :nome";
 
         try {
@@ -48,6 +48,14 @@ public class AlunoDAO {
             throw new NotFoundException("Aluno não encontrado");
         }
 
+    }
+
+    public void updateStudent(Aluno aluno) {
+        em.getTransaction().begin();
+
+        em.merge(aluno);
+
+        em.getTransaction().commit();
     }
 
 }

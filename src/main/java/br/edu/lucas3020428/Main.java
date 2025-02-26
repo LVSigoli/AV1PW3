@@ -40,7 +40,7 @@ public class Main {
                     excluirAluno(scanner, em);
                     break;
                 case 3:
-                    alterarAluno();
+                    alterarAluno(scanner, em);
                     break;
                 case 4:
                     buscarAluno();
@@ -106,15 +106,86 @@ public class Main {
         System.out.println(" ");
     }
 
-    private static void alterarAluno() {
-        System.out.println("** ALTERAR ALUNO **");
+    private static void alterarAluno(Scanner scanner, EntityManager em) {
+        System.out.println("ALTERAR ALUNO: ");
+        scanner.nextLine();
+
+        System.out.println("Informe o nome do aluno: ");
+        String nome = scanner.nextLine().trim();
+
+        AlunoDAO alunoDAO = new AlunoDAO(em);
+
+        try {
+            Aluno alunoFound = alunoDAO.findStudentByName(nome);
+
+            if (alunoFound == null) {
+                System.out.println("Aluno não encontrado com o nome: " + nome);
+                return;
+            }
+
+            System.out.println("Novos dados (deixe em branco para manter o atual)");
+
+
+            System.out.println("Novo nome do aluno: ");
+            String novoNome = scanner.nextLine().trim();
+            if (!novoNome.isEmpty()) {
+                alunoFound.setNome(novoNome);
+            }
+
+
+            System.out.println("Novo email: ");
+            String novoEmail = scanner.nextLine().trim();
+            if (!novoEmail.isEmpty()) {
+                alunoFound.setEmail(novoEmail);
+            }
+
+
+            System.out.println("Novo RA: ");
+            String novoRa = scanner.nextLine().trim();
+            if (!novoRa.isEmpty()) {
+                alunoFound.setRa(novoRa);
+            }
+
+
+            System.out.println("Nova Nota 1: ");
+            String novaNota1 = scanner.nextLine().trim();
+            if (!novaNota1.isEmpty()) {
+                alunoFound.setNota1(new BigDecimal(novaNota1));
+            }
+
+
+            System.out.println("Nova Nota 2: ");
+            String novaNota2 = scanner.nextLine().trim();
+            if (!novaNota2.isEmpty()) {
+                alunoFound.setNota2(new BigDecimal(novaNota2));
+            }
+
+
+            System.out.println("Nova Nota 3: ");
+            String novaNota3 = scanner.nextLine().trim();
+            if (!novaNota3.isEmpty()) {
+                alunoFound.setNota3(new BigDecimal(novaNota3));
+            }
+
+
+            alunoDAO.updateStudent(alunoFound);
+
+            System.out.println("Aluno atualizado com sucesso!");
+
+        } catch (NotFoundException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro inesperado ao atualizar aluno: " + e.getMessage());
+        }
 
         System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
     }
 
-    private static void buscarAluno() {
-        System.out.println("** BUSCAR ALUNO **");
+
+    private static void buscarAluno(Scanner scanner, EntityManager em) {
+        System.out.println(" BUSCAR ALUNO: ");
+        scanner.nextLine();
 
         System.out.println("----------------------------------------------------------------");
         System.out.println(" ");
