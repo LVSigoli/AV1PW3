@@ -5,6 +5,7 @@ package br.edu.lucas3020428.aluno;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "alunos")
@@ -96,8 +97,31 @@ public class Aluno {
                 "Nome: " + nome + "\n" +
                 "RA: " + ra + "\n" +
                 "Email: " + email + "\n" +
-                "Nota 1: " + nota1 + "\n" +
-                "Nota 2: " + nota2 + "\n" +
-                "Nota 3: " + nota3;
+                "Notas: " + nota1 + " - " + nota2 + " - " + nota3 + "\n";
+    }
+
+    public String toStringWithStatus() {
+        BigDecimal media = getMedia();
+        String status = getStatus(media);
+
+        return "Nome: " + nome + "\n" +
+                "RA: " + ra + "\n" +
+                "Email: " + email + "\n" +
+                "Notas: " + nota1 + " - " + nota2 + " - " + nota3 + "\n" +
+                "Média: " + media + "\n" +
+                "Status: " + status;
+    }
+
+    private BigDecimal getMedia() {
+        BigDecimal sum = nota1.add(nota2.add(nota3));
+        return sum.divide(BigDecimal.valueOf(3), 2, RoundingMode.HALF_UP);
+    }
+
+    private String getStatus(BigDecimal media) {
+        if (media.compareTo(BigDecimal.valueOf(7)) >= 0) return "Aprovado";
+
+        if (media.compareTo(BigDecimal.valueOf(4)) >= 0) return "Recuperação";
+
+        return "Reprovado";
     }
 }

@@ -214,7 +214,7 @@ public class Main {
 
             students.forEach(
                     student -> {
-                        System.out.println(student);
+                        System.out.println(student.toStringWithStatus());
                         System.out.println(" ");
                     }
             );
